@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <time.h>
+
+void quicksort(int a[], int n, int lo, int hi);
+int partition(int a[], int lo, int hi);
+void swap(int a[], int i, int j);
+
+const int MAX_SIZE = 100;
+
+int main(int argc, char const *argv[]) {
+  clock_t start, end;
+
+  int size = 0;
+  printf("Enter number of elements in your array : (max 100) ");
+  scanf("%i", &size);
+
+  int array[MAX_SIZE];
+
+  printf("Enter your array elements : ");
+  for (int i = 0; i < size; i++)
+    scanf("%i", &array[i]);
+
+  printf("\nRunning quicksort...");
+  start = clock();
+  quicksort(array, size, 0, size - 1);
+  end = clock();
+
+  double cpu_time_use = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+  printf("\nSorted array is : ");
+  for (int i = 0; i < size; i++)
+    printf("%i ", array[i]);
+
+  printf("\nThe running time of quicksort is %f\n", cpu_time_use);
+
+  return 0;
+}
+
+void quicksort(int arr[], int size, int lo, int hi) {
+  if (hi <= lo)
+    return;
+
+  printf("\nArray after current pass is : \n");
+  for (int i = 0; i < size; i++) {
+    printf("%i ", arr[i]);
+  }
+
+  int j = partition(arr, lo, hi);
+  quicksort(arr, size, lo, j - 1);
+  quicksort(arr, size, j + 1, hi);
+}
+
+int partition(int arr[], int lo, int hi) {
+  int i = lo, j = hi + 1;
+  int v = arr[lo];
+  while (1) {
+    while (arr[++i] < v)
+      if (i == hi)
+        break;
+    while (arr[--j] > v)
+      if (j == lo)
+        break;
+    if (i >= j)
+      break;
+    swap(arr, i, j);
+  }
+  swap(arr, lo, j);
+  return j;
+}
+
+void swap(int arr[], int i, int j) {
+  int temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
+}
